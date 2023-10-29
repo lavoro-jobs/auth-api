@@ -1,4 +1,4 @@
-from auth_api.database import db
+from lavoro_auth_api.database import db
 
 
 def get_user_by_email(email: str):
