@@ -16,4 +16,3 @@ CREATE TABLE IF NOT EXISTS verification_token (
     account_id uuid NOT NULL REFERENCES account(id) ON DELETE CASCADE,
     expiry_date TIMESTAMP NOT NULL
 );
-
