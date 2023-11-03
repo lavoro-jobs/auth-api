@@ -27,6 +27,8 @@ def authenticate_user(email: str, password: str):
     user = get_user_by_email(email)
     if not user:
         return False
+    if not user.is_active:
+        return False
     if not verify_password(password, user.password_hash):
         return False
     return user
