@@ -39,7 +39,7 @@ def register(form_data: Annotated[RegistrationForm, Depends()]):
     return {"message": f"Email sent to {form_data.email}"}
 
 
-@router.post("/confirm/{verification_token}}")
+@router.post("/confirm/{verification_token}")
 def confirm_email(verification_token: str):
     activation_result = activate_user_account(verification_token)
     if activation_result:
