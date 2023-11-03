@@ -1,19 +1,17 @@
-from datetime import timedelta
-
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, HTTPException, status
 
 from lavoro_auth_api.database.queries import (
     get_user_by_email,
-    post_user_to_accounts_tokens,
+    create_account,
 )
-from lavoro_auth_api.helpers.login_helpers import get_password_hash, create_access_token
+from lavoro_auth_api.helpers.login_helpers import get_password_hash
+from lavoro_auth_api.helpers.register_helpers import create_confirmation_token
 
 
 router = APIRouter(prefix="/register", tags=["register"])
 
 
-@router.post("/user")
+@router.post("/")
 def register_user(username: str, password: str, role: str):
     user = get_user_by_email(username)
     if user:
@@ -23,10 +21,9 @@ def register_user(username: str, password: str, role: str):
         )
 
     hashed_password = get_password_hash(password)
-    confirmation_token = create_access_token(
-        data={"sub": username}, expires_delta=timedelta(days=1)
-    )
-    affected_rows = post_user_to_accounts_tokens(
+    confirmation_token = create_confirmation_token()
+    affected_rows = create_account(
         username, hashed_password, role, confirmation_token
     )
-    return {"affected_rows": affected_rows}
+    # send_confirmation_email(username)
+    return {"message": "User successfuly created"}

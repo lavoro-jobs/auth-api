@@ -1,8 +1,6 @@
 from lavoro_auth_api.database import db
 from lavoro_library.models import UserInDB
 
-from datetime import datetime, timezone, timedelta
-
 
 def get_user_by_email(email: str):
     result = db.execute_one(("SELECT * FROM accounts WHERE email = %s", (email,)))
@@ -12,14 +10,14 @@ def get_user_by_email(email: str):
         return None
 
 
-def post_user_to_accounts_tokens(
+def create_account(
     email: str,
     password_hash: str,
     role: str,
     token: str,
 ):
     accounts_tuple = (
-        "INSERT INTO accounts (email, password_hash, role, is_active) VALUES (%s, %s, %s, TRUE)",
+        "INSERT INTO accounts (email, password_hash, role, is_active) VALUES (%s, %s, %s, FALSE)",
         (email, password_hash, role),
     )
     tokens_tuple = (
@@ -29,7 +27,6 @@ def post_user_to_accounts_tokens(
 
     result = db.execute_many([accounts_tuple, tokens_tuple])
     if result["affected_rows"]:
-        print("#########################" + str(result["affected_rows"]))
         return result["affected_rows"]
     else:
         return None
