@@ -14,5 +14,5 @@ CREATE TABLE IF NOT EXISTS accounts (
 CREATE TABLE IF NOT EXISTS verification_tokens (
     token VARCHAR(255) NOT NULL PRIMARY KEY UNIQUE,
     account_id uuid NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
-    expiry_date TIMESTAMP NOT NULL
+    expiry_date TIMESTAMP NOT NULL DEFAULT NOW() + INTERVAL '48 hours'
 );

@@ -8,3 +8,25 @@ def get_user_by_email(email: str):
         return UserInDB(**result["result"][0])
     else:
         return None
+
+
+def create_account(
+    email: str,
+    password_hash: str,
+    role: str,
+    token: str,
+):
+    accounts_tuple = (
+        "INSERT INTO accounts (email, password_hash, role, is_active) VALUES (%s, %s, %s, FALSE)",
+        (email, password_hash, role),
+    )
+    tokens_tuple = (
+        "INSERT INTO verification_tokens (token, account_id) SELECT %s, id FROM accounts WHERE email = %s",
+        (token, email),
+    )
+
+    result = db.execute_many([accounts_tuple, tokens_tuple])
+    if result["affected_rows"]:
+        return result["affected_rows"]
+    else:
+        return None
