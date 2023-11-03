@@ -23,9 +23,9 @@ def post_user_to_accounts_tokens(
         (email, password_hash, role),
     )
     tokens_tuple = (
-        "INSERT INTO verification_tokens (token, account_id, expiry_date) SELECT %s, id, created_on + INTERVAL '12 hours' FROM accounts WHERE email = %s",
+        "INSERT INTO verification_tokens (token, account_id) SELECT %s, id FROM accounts WHERE email = %s",
         (token, email),
-    )  # hardcoded 12 hours expiry date
+    )
 
     result = db.execute_many([accounts_tuple, tokens_tuple])
     if result["affected_rows"]:
