@@ -30,6 +30,28 @@ def get_user_by_verification_token(verification_token: str):
         return None
 
 
+def create_account(
+    email: str,
+    password_hash: str,
+    role: str,
+    token: str,
+):
+    accounts_tuple = (
+        "INSERT INTO accounts (email, password_hash, role, is_active) VALUES (%s, %s, %s, FALSE)",
+        (email, password_hash, role),
+    )
+    tokens_tuple = (
+        "INSERT INTO verification_tokens (token, account_id) SELECT %s, id FROM accounts WHERE email = %s",
+        (token, email),
+    )
+
+    result = db.execute_many([accounts_tuple, tokens_tuple])
+    if result["affected_rows"]:
+        return result["affected_rows"]
+    else:
+        return None
+
+
 def set_active_account(user_id: uuid.UUID):
     query_tuple = (
         """

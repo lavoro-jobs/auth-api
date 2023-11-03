@@ -19,7 +19,7 @@ def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
+            detail="Incorrect email or password. If you have not verified your email, please do so before logging in.",
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
