@@ -1,6 +1,4 @@
-from enum import Enum
 from typing import Annotated
-from pydantic import BaseModel, EmailStr, SecretStr
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
@@ -8,20 +6,7 @@ from lavoro_auth_api.database.queries import get_user_by_email
 from lavoro_auth_api.helpers.confirmation_helpers import activate_user_account
 from lavoro_auth_api.helpers.register_helpers import register_user
 from lavoro_auth_api.helpers.email_helpers import send_confirmation_email
-
-
-router = APIRouter(prefix="/register", tags=["register"])
-
-
-class Role(str, Enum):
-    applicant = "applicant"
-    employer = "employer"
-
-
-class RegistrationForm(BaseModel):
-    email: EmailStr
-    password: SecretStr
-    role: Role
+from lavoro_library.models import RegistrationForm
 
 
 router = APIRouter(prefix="/register", tags=["register"])
