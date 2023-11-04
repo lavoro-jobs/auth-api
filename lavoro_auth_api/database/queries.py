@@ -19,7 +19,7 @@ def get_user_by_verification_token(verification_token: str):
         SELECT * FROM verification_tokens
         JOIN accounts
         ON verification_tokens.account_id = accounts.id
-        WHERE token = %s
+        WHERE token = %s AND expiry_date > NOW()
         """,
         (verification_token,),
     )
