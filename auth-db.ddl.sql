@@ -17,14 +17,27 @@ CREATE TABLE IF NOT EXISTS verification_tokens (
     expiry_date TIMESTAMP NOT NULL DEFAULT NOW() + INTERVAL '48 hours'
 );
 
-CREATE OR REPLACE FUNCTION delete_verification_token() RETURNS TRIGGER AS $$
+
+CREATE OR REPLACE FUNCTION delete_confirmed_token() RETURNS TRIGGER AS $$
 BEGIN
     DELETE FROM verification_tokens WHERE account_id = OLD.id;
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER delete_token 
+CREATE TRIGGER delete_confirmed_token
 AFTER UPDATE ON accounts 
 FOR EACH ROW WHEN (OLD.is_active = FALSE AND NEW.is_active = TRUE)
-EXECUTE FUNCTION delete_verification_token();
+EXECUTE FUNCTION delete_confirmed_token();
+
+CREATE OR REPLACE FUNCTION delete_expired_tokens() RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM verification_tokens WHERE expiry_date < NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER delete_expired_tokens
+AFTER INSERT ON verification_tokens
+FOR EACH ROW
+EXECUTE FUNCTION delete_expired_tokens();
