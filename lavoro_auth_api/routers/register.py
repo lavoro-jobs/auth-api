@@ -20,7 +20,7 @@ async def register(form_data: Annotated[RegistrationForm, Depends()]):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User already exists",
         )
-    confirmation_token = register_user(form_data.email, form_data.password.get_secret_value(), form_data.role)
+    confirmation_token = register_user(form_data.email, form_data.password, form_data.role)
     await send_confirmation_email(form_data.email, confirmation_token)
     return {"message": f"Email sent to {form_data.email}"}
 
