@@ -22,6 +22,12 @@ def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depen
             detail="Incorrect email or password. If you have not verified your email, please do so before logging in.",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    if not user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Account inactive. Please verify your email before logging in.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(data={"sub": user.email}, expires_delta=access_token_expires)
     return {"access_token": access_token, "token_type": "bearer"}
