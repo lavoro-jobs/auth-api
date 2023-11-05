@@ -33,7 +33,7 @@ EXECUTE FUNCTION delete_confirmed_token();
 CREATE OR REPLACE FUNCTION delete_expired_tokens() RETURNS TRIGGER AS $$
 BEGIN
     DELETE FROM verification_tokens WHERE expiry_date < NOW();
-    RETURN NEW;
+    RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
