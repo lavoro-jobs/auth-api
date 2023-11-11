@@ -5,6 +5,11 @@ WORKDIR /devel
 COPY ./lavoro-auth-api/requirements.txt /devel/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /devel/requirements.txt
 
+RUN apt-get update && apt-get install -y curl
+
+RUN curl -sS https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -o /wait-for-it.sh \
+    && chmod +x /wait-for-it.sh
+
 COPY ./lavoro-auth-api/lavoro_auth_api /devel/lavoro_auth_api
 
 
@@ -17,4 +22,5 @@ RUN /devel/pre_install.sh
 
 ENV PYTHONPATH "${PYTHONPATH}:/devel"
 
+ENTRYPOINT ["/wait-for-it.sh", "pgsql:5432", "--timeout=150", "--"]
 CMD ["uvicorn", "lavoro_auth_api.auth_api:app", "--host", "0.0.0.0", "--port", "80"]
