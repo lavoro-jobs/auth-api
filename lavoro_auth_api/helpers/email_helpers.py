@@ -21,7 +21,7 @@ async def send_confirmation_email(email, token):
     <html>
         <body>
             <h1>Confirm your email</h1>
-            <p>Please confirm your email by clicking on the link: <a href="http://localhost:8001/register/confirm/{token}">http://localhost:8001/register/confirm/{token}</a></p>
+            <p>Please confirm your email by clicking on the link: <a href="http://localhost:3000/confirm-email/{token}">http://localhost:3000/confirm-email/{token}</a></p>
         </body>
     </html>
     """
