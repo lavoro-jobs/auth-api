@@ -22,14 +22,14 @@ async def register(form_data: Annotated[RegistrationForm, Depends()]):
         )
     confirmation_token = register_user(form_data.email, form_data.password, form_data.role)
     await send_confirmation_email(form_data.email, confirmation_token)
-    return {"message": f"Email sent to {form_data.email}"}
+    return {"detail": f"Email sent to {form_data.email}"}
 
 
 @router.post("/confirm/{verification_token}")
 def confirm_email(verification_token: str):
     activation_result = activate_user_account(verification_token)
     if activation_result:
-        return {"message": "Account activated"}
+        return {"detail": "Account activated"}
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Wrong verification token or account already activated"
