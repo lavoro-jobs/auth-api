@@ -52,6 +52,23 @@ def create_account(
         return None
 
 
+def create_account_no_confirm(
+    email: str,
+    password_hash: str,
+    role: str,
+):
+    query_tuple = (
+        "INSERT INTO accounts (email, password_hash, role, is_active) VALUES (%s, %s, %s, TRUE)",
+        (email, password_hash, role),
+    )
+
+    result = db.execute_one(query_tuple)
+    if result["affected_rows"]:
+        return result["affected_rows"]
+    else:
+        return None
+
+
 def set_active_account(user_id: uuid.UUID):
     query_tuple = (
         """

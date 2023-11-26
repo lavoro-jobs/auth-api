@@ -1,4 +1,5 @@
 from fastapi import APIRouter, FastAPI
+from fastapi.exceptions import RequestValidationError
 
 from lavoro_auth_api.database import db
 from lavoro_auth_api.routers.account import router as account_router
@@ -12,4 +13,6 @@ router.include_router(login_router)
 router.include_router(register_router)
 
 app = FastAPI()
+
+
 app.include_router(router)
