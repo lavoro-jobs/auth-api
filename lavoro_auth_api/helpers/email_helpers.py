@@ -2,18 +2,7 @@ import os
 
 from fastapi_mail import FastMail, MessageSchema, MessageType, ConnectionConfig
 
-connection_config = ConnectionConfig(
-    MAIL_USERNAME="lavoro.projektr@gmail.com",
-    MAIL_PASSWORD=os.environ.get("EMAIL_PASSWORD"),
-    MAIL_FROM="lavoro.projektr@gmail.com",
-    MAIL_PORT=587,
-    MAIL_SERVER="smtp.gmail.com",
-    MAIL_FROM_NAME="Lavoro",
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS=False,
-    USE_CREDENTIALS=True,
-    VALIDATE_CERTS=True,
-)
+from lavoro_library.email import send_email
 
 
 async def send_confirmation_email(email, token):
@@ -25,11 +14,5 @@ async def send_confirmation_email(email, token):
         </body>
     </html>
     """
-
-    message = MessageSchema(
-        subject="Lavoro - Confirm your email", recipients=[email], body=message_html, subtype=MessageType.html
-    )
-
-    fm = FastMail(connection_config)
-    await fm.send_message(message)
+    await send_email(email, "Lavoro - Confirm your email", message_html)
     return True
