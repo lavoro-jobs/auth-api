@@ -1,7 +1,3 @@
-import os
-
-from fastapi_mail import FastMail, MessageSchema, MessageType, ConnectionConfig
-
 from lavoro_library.email import send_email
 
 
