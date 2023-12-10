@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from lavoro_auth_api.database.queries import get_user_by_email
 
-from lavoro_library.models import UserInDB
-
+# from lavoro_library.models import UserInDB
+from lavoro_library.model.auth_api.db_models import Account
 
 router = APIRouter(prefix="/account", tags=["account"])
 
 
-@router.get("/{email}", response_model=UserInDB)
+@router.get("/{email}", response_model=Account)
 def get_current_user(email: str):
     user = get_user_by_email(email)
     if user:

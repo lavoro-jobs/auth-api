@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from typing import Union
 
-from jose import JWTError, jwt
+from jose import jwt
 from passlib.context import CryptContext
 
 from lavoro_auth_api.database.queries import get_user_by_email
