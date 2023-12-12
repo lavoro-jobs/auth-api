@@ -1,19 +1,20 @@
 import uuid
 
 from lavoro_auth_api.database import db
-from lavoro_library.models import UserInDB
+
+from lavoro_library.model.auth_api.db_models import Account
 
 
-def get_user_by_email(email: str):
+def get_account_by_email(email: str):
     query_tuple = ("SELECT * FROM accounts WHERE email = %s", (email,))
     result = db.execute_one(query_tuple)
     if result["result"]:
-        return UserInDB(**result["result"][0])
+        return Account(**result["result"][0])
     else:
         return None
 
 
-def get_user_by_verification_token(verification_token: str):
+def get_account_by_verification_token(verification_token: str):
     query_tuple = (
         """
         SELECT * FROM verification_tokens
@@ -25,7 +26,7 @@ def get_user_by_verification_token(verification_token: str):
     )
     result = db.execute_one(query_tuple)
     if result["result"]:
-        return UserInDB(**result["result"][0])
+        return Account(**result["result"][0])
     else:
         return None
 
