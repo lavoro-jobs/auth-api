@@ -2,7 +2,6 @@ import uuid
 
 from lavoro_auth_api.database import db
 
-# from lavoro_library.models import UserInDB
 from lavoro_library.model.auth_api.db_models import Account
 
 
