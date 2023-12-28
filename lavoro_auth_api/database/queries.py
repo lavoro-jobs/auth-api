@@ -36,10 +36,11 @@ def create_account(
     password_hash: str,
     role: str,
     token: str,
+    stream_chat_token: str,
 ):
     accounts_tuple = (
-        "INSERT INTO accounts (email, password_hash, role, is_active) VALUES (%s, %s, %s, FALSE)",
-        (email, password_hash, role),
+        "INSERT INTO accounts (email, password_hash, role, is_active, stream_chat_token) VALUES (%s, %s, %s, FALSE, %s)",
+        (email, password_hash, role, stream_chat_token),
     )
     tokens_tuple = (
         "INSERT INTO verification_tokens (token, account_id) SELECT %s, id FROM accounts WHERE email = %s",
