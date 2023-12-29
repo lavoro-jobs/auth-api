@@ -1,4 +1,7 @@
+import os
 import secrets
+
+import stream_chat
 from fastapi import HTTPException, status
 
 from lavoro_auth_api import common
@@ -16,7 +19,11 @@ async def register(form_data: RegisterDTO):
         )
     confirmation_token = secrets.token_urlsafe(32)
     password_hash = common.get_password_hash(form_data.password)
-    queries.create_account(form_data.email, password_hash, form_data.role, confirmation_token)
+
+    client = stream_chat.StreamChat(os.environ["STREAM_CHAT_API_KEY"], os.environ["STREAM_CHAT_API_SECRET"])
+    stream_chat_token = client.create_token(form_data.email)
+
+    queries.create_account(form_data.email, password_hash, form_data.role, confirmation_token, stream_chat_token)
     return await common.send_confirmation_email(form_data.email, confirmation_token)
 
 
