@@ -1,3 +1,4 @@
+import hashlib
 import os
 import secrets
 
@@ -21,7 +22,7 @@ async def register(form_data: RegisterDTO):
     password_hash = common.get_password_hash(form_data.password)
 
     client = stream_chat.StreamChat(os.environ["STREAM_CHAT_API_KEY"], os.environ["STREAM_CHAT_API_SECRET"])
-    stream_chat_token = client.create_token(form_data.email)
+    stream_chat_token = client.create_token(hashlib.sha256(form_data.email.encode()).hexdigest())
 
     queries.create_account(form_data.email, password_hash, form_data.role, confirmation_token, stream_chat_token)
     return await common.send_confirmation_email(form_data.email, confirmation_token)
