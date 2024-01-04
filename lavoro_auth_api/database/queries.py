@@ -58,10 +58,11 @@ def create_account_no_confirm(
     email: str,
     password_hash: str,
     role: str,
+    stream_chat_token: str,
 ):
     query_tuple = (
-        "INSERT INTO accounts (email, password_hash, role, is_active) VALUES (%s, %s, %s, TRUE)",
-        (email, password_hash, role),
+        "INSERT INTO accounts (email, password_hash, role, stream_chat_token, is_active) VALUES (%s, %s, %s, %s, TRUE)",
+        (email, password_hash, role, stream_chat_token),
     )
 
     result = db.execute_one(query_tuple)
