@@ -26,7 +26,7 @@ CMD ["uvicorn", "lavoro_auth_api.auth_api:app", "--host", "0.0.0.0", "--port", "
 
 FROM base AS production
 
-COPY ./requirements-prod.txt /app/requirements.txt
+COPY ./requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
 ARG GITLAB_ACCESS_TOKEN
