@@ -14,6 +14,15 @@ def get_account_by_email(email: str):
         return None
 
 
+def get_stream_chat_token(account_id: uuid.UUID):
+    query_tuple = ("SELECT stream_chat_token FROM accounts WHERE id = %s", (account_id,))
+    result = db.execute_one(query_tuple)
+    if result["result"]:
+        return result["result"][0]["stream_chat_token"]
+    else:
+        return None
+
+
 def get_account_by_verification_token(verification_token: str):
     query_tuple = (
         """
