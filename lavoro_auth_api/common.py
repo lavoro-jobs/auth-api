@@ -12,6 +12,7 @@ from lavoro_auth_api.database.queries import get_account_by_email
 from lavoro_library.email import send_email
 
 
+FRONTEND_URL = os.environ["FRONTEND_URL"]
 SECRET_KEY = os.environ["SECRET_KEY"]
 ALGORITHM = "HS256"
 
@@ -52,7 +53,7 @@ async def send_confirmation_email(email, token):
     <html>
         <body>
             <h1>Confirm your email</h1>
-            <p>Please confirm your email by clicking on the link: <a href="http://localhost:3000/confirm-email/{token}">http://localhost:3000/confirm-email/{token}</a></p>
+            <p>Please confirm your email by clicking on the link: <a href="{FRONTEND_URL}/confirm-email/{token}">{FRONTEND_URL}/confirm-email/{token}</a></p>
         </body>
     </html>
     """
