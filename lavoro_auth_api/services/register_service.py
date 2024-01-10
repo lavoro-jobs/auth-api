@@ -38,7 +38,7 @@ def register_no_confirm(form_data: RegisterDTO):
     password_hash = common.get_password_hash(form_data.password)
 
     client = stream_chat.StreamChat(os.environ["STREAM_CHAT_API_KEY"], os.environ["STREAM_CHAT_API_SECRET"])
-    stream_chat_token = client.create_token(form_data.email)
+    stream_chat_token = client.create_token(hashlib.sha256(form_data.email.encode()).hexdigest())
 
     queries.create_account_no_confirm(form_data.email, password_hash, form_data.role, stream_chat_token)
     return {"detail": f"User {form_data.email} registered and activated"}
